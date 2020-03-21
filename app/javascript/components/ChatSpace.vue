@@ -8,7 +8,9 @@
     </div>
 
     <div class="speak">
-      <input v-model="formText" type="text" @keypress.enter="sendMessage"> <button @click.prevent="sendMessage">送信する</button>
+      <span><label for="name">名前</label><input id="name" v-model="name" placeholder="名無しさん"></span>
+      <input v-model="formText" type="text" @keypress.enter="sendMessage">
+      <button @click.prevent="sendMessage">送信する</button>
     </div>
   </div>
 </template>
@@ -31,7 +33,13 @@ export default {
   data() {
     return {
       messages: [],
+      name: '',
       formText: ''
+    }
+  },
+  computed: {
+    sendText() {
+      return `${this.name || '名無しさん'}: ${this.formText}`
     }
   },
   created() {
@@ -53,7 +61,7 @@ export default {
     sendMessage() {
       const data = {
         postable_type: 'text',
-        content: this.formText
+        content: this.sendText
       }
       axios.post(`./${this.roomId}/posts.json`, data)
       .then((responce)=>{

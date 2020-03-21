@@ -1,6 +1,8 @@
 class Room < ApplicationRecord
   has_many :room_posts
 
+  validates :name, presence: true, uniqueness: true
+
   def self.object_names
     %i[text]
   end

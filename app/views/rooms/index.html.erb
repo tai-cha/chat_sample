@@ -1,5 +1,14 @@
 <div class="rooms">
-  <% @rooms.find_each do |room| %>
-    <%= link_to room.name, room_path(room) %>
+  <h2>ガバチャット</h2>
+  <h3>ルーム一覧</h3>
+  <ul>
+  <% @rooms.each do |room| %>
+    <li><%= link_to room.name, room_path(room) %></li>
+  <% end %>
+  </ul>
+  ルームを新規作成:
+  <%= form_with model: Room.new, local: true do |f| %>
+    <%= f.text_field :name %>
+    <%= f.submit '作成' %>
   <% end %>
 </div>

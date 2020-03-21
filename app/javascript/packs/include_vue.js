@@ -4,7 +4,7 @@ import ActionCable from 'actioncable'
 import TurbolinksAdapter from 'vue-turbolinks'
 Vue.use(TurbolinksAdapter)
 
-Vue.prototype.$cable = ActionCable.createConsumer('ws:0.0.0.0:3000/cable');
+Vue.prototype.$cable = ActionCable.createConsumer('wss:taichan-chat-sample.herokuapp.com/cable');
 
 document.addEventListener('turbolinks:load', () => {
   new Vue({

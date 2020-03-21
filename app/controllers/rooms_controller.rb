@@ -4,6 +4,6 @@ class RoomsController < ApplicationController
   end
 
   def show
-    @room = Room.includes(:room_posts).find(params[:id])
+    @room = Room.includes(room_posts: :postable).find(params[:id])
   end
 end

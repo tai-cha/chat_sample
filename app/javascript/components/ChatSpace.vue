@@ -1,13 +1,14 @@
 <template>
   <div class="chatspace">
     <div class="messages">
+      <p v-if="messages.length < 1">No Message Here.</p>
       <p v-for="message in messages" class="message">
-        <template v-if="message.content">{{ message.content }}</template>
+        {{ message.content }}
       </p>
     </div>
 
     <div class="speak">
-      <input v-model="formText" type="text"> <button @click="sendMessage">送信する</button>
+      <input v-model="formText" type="text" @keypress.enter="sendMessage"> <button @click.prevent="sendMessage">送信する</button>
     </div>
   </div>
 </template>
@@ -56,18 +57,20 @@ export default {
       }
       axios.post(`./${this.roomId}/posts.json`, data)
       .then((responce)=>{
-        console.log(responce)
+        this.formText = ''
       })
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .messages {
   padding: 10px 30px;
   border: 3px solid black;
   border-radius: 20px;
+  height: min(80vh, 700px);
+  overflow-y: scroll;
 }
 .message {
   border: 1px dashed black;

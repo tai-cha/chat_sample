@@ -1,13 +1,24 @@
 <template>
-  <div class="messages">
-    <p v-for="message in messages" class="message">
-      <template v-if="message.content">{{ message.content }}</template>
-    </p>
+  <div class="chatspace">
+    <div class="messages">
+      <p v-for="message in messages" class="message">
+        <template v-if="message.content">{{ message.content }}</template>
+      </p>
+    </div>
+
+    <div class="speak">
+      <input v-model="formText" type="text"> <button @click="sendMessage">送信する</button>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+
+let token = document.getElementsByName('csrf-token')[0].getAttribute('content')
+axios.defaults.headers.common['X-CSRF-Token'] = token
+axios.defaults.headers.common['Accept'] = 'application/json'
+
 export default {
   name: "ChatSpace",
   props: {
@@ -18,15 +29,38 @@ export default {
   },
   data() {
     return {
-      messages: []
+      messages: [],
+      formText: ''
     }
   },
-  mounted() {
+  created() {
     axios.get(`./${this.roomId}.json`)
     .then((responce)=>{
       this.messages = responce.data.messages
-      console.log(responce)
     })
+  },
+  mounted() {
+    const _this = this
+    console.log(this.$cable)
+    const channel = this.$cable.subscriptions.create({ channel: "ChatRoomChannel", room_id: this.roomId }, {
+      received(data) {
+        window.console.debug(data)
+        _this.messages.push(JSON.parse(data.body))
+      }
+    })
+    console.log(channel)
+  },
+  methods: {
+    sendMessage() {
+      const data = {
+        postable_type: 'text',
+        content: this.formText
+      }
+      axios.post(`./${this.roomId}/posts.json`, data)
+      .then((responce)=>{
+        console.log(responce)
+      })
+    }
   }
 }
 </script>

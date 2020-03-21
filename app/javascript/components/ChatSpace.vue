@@ -41,14 +41,12 @@ export default {
   },
   mounted() {
     const _this = this
-    console.log(this.$cable)
     const channel = this.$cable.subscriptions.create({ channel: "ChatRoomChannel", room_id: this.roomId }, {
       received(data) {
         window.console.debug(data)
         _this.messages.push(JSON.parse(data.body))
       }
     })
-    console.log(channel)
   },
   methods: {
     sendMessage() {

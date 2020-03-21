@@ -1,3 +1,4 @@
+json.name @room.name
 json.messages do |json|
   json.array! @room.room_posts.each do |post|
     json.type post.type

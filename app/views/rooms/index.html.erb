@@ -1,5 +1,5 @@
 <div class="rooms">
   <% @rooms.find_each do |room| %>
-    <%= room.name %>
+    <%= link_to room.name, room_path(room) %>
   <% end %>
 </div>
